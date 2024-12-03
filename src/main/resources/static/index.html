@@ -1,114 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f0f8ff;
-            color: #333;
-            text-align: center;
-            padding: 20px;
-        }
-
-        h1 {
-            color: #0066cc;
-        }
-
-        #weather-info {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            background: #fff;
-            border-radius: 8px;
-            display: inline-block;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 400px;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            width: 200px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #0066cc;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #004d99;
-        }
-
-        .error {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<h1>Weather App</h1>
-<p>Enter the city to get the current weather:</p>
-
-<div>
-    <label for="city">City Name:</label>
-    <input type="text" id="city" placeholder="Enter city name">
-    <button onclick="getWeather()">Get Weather</button>
+<div class="container">
+    <h1>Weather App</h1>
+    <div class="form-group">
+        <input type="text" id="city" placeholder="Enter city name" />
+        <button onclick="getWeather()">Get Weather</button>
+    </div>
+    <div id="weather-info" class="weather-info"></div>
 </div>
-
-<div id="weather-info">
-    <p>Enter a city to see the weather information.</p>
-</div>
-
-<script>
-    const backendUrl = "http://localhost:8080/api/weather"; // Update as needed
-
-    function getWeather() {
-        const city = document.getElementById("city").value.trim();
-
-        if (!city) {
-            document.getElementById("weather-info").innerHTML = `<p class="error">Please enter a valid city name.</p>`;
-            return;
-        }
-
-        document.getElementById("weather-info").innerHTML = `<p>Loading weather data for <strong>${city}</strong>...</p>`;
-
-        fetch(`${backendUrl}/${encodeURIComponent(city)}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(weather => {
-            if(weather.error){
-            document.getElementById("weather-info).innerHTML=`<p class="error">${weather.error}</p>`;}
-            else{
-                const weatherDiv = `
-                    <div>
-                        <p><strong>City:</strong> ${weather.location.name}</p>
-                        <p><strong>Temperature:</strong> ${weather.current.temp_c}°C</p>
-                        <p><strong>Condition:</strong> ${weather.current.condition.text}</p>
-                        <p><strong>Humidity:</strong> ${weather.current.humidity}%</p>
-                        <p><strong>Wind:</strong> ${weather.current.wind_kph} kph</p>
-                    </div>
-                `;
-                document.getElementById("weather-info").innerHTML = weatherDiv;
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching weather data:", error);
-                document.getElementById("weather-info").innerHTML = `<p class="error">Unable to fetch weather data. Please check the city name and try again.</p>`;
-            });
-    }
-</script>
+<script src="app.js"></script>
 </body>
 </html>
